@@ -42,8 +42,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_GH_DEV_SECRET_ACCESS_KEY }}
           aws-region:  ${{ env.AWS_REGION }}
       
-      - name: Printing the contents of Directory before Packer build
+      - name: Printing the contents of Directory before s3 copy
         run: ls -l
+
+      - name: Printing the path of Directory
+        run: pwd
 
       - name: copying lambda zip to s3
         run: |
