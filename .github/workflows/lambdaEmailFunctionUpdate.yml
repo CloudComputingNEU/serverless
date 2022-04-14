@@ -6,7 +6,7 @@ env:
   AWS_REGION: us-east-1
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -23,8 +23,10 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
       # Runs a single command using the runners shell
+      - name: Installing dependencies
+        run: npm ci
+
       - name: Compilation checking
         run: node index.js
 
@@ -36,13 +38,19 @@ jobs:
       - name: AWS credentials 
         uses: aws-actions/configure-aws-credentials@v1
         with: 
-          aws-access-key-id: ${{ secrets.AWS_GH_DEV_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_GH_DEV_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_GH_DEMO_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_GH_DEMO_SECRET_ACCESS_KEY }}
           aws-region:  ${{ env.AWS_REGION }}
       
+      - name: Printing the contents of Directory before s3 copy
+        run: ls -l
+
+      - name: Printing the path of Directory
+        run: pwd
+
       - name: copying lambda zip to s3
         run: |
-          aws s3 sync ./lambda.zip s3://${{secrets.AWS_LAMBDA_EMAIL_VERIFICATION}}
+          aws s3 cp lambda.zip s3://${{secrets.AWS_LAMBDA_EMAIL_VERIFICATION}}
       
       - name: updating lambda function
         run: |
