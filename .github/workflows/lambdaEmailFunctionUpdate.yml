@@ -50,7 +50,7 @@ jobs:
 
       - name: copying lambda zip to s3
         run: |
-          aws s3 sync lambda.zip s3://${{secrets.AWS_LAMBDA_EMAIL_VERIFICATION}}
+          aws s3 cp lambda.zip s3://${{secrets.AWS_LAMBDA_EMAIL_VERIFICATION}}
       
       - name: updating lambda function
         run: |
