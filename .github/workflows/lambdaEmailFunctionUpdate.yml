@@ -42,9 +42,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_GH_DEV_SECRET_ACCESS_KEY }}
           aws-region:  ${{ env.AWS_REGION }}
       
+      - name: Printing the contents of Directory before Packer build
+        run: ls -l
+
       - name: copying lambda zip to s3
         run: |
-          aws s3 sync ./lambda.zip s3://${{secrets.AWS_LAMBDA_EMAIL_VERIFICATION}}
+          aws s3 sync lambda.zip s3://${{secrets.AWS_LAMBDA_EMAIL_VERIFICATION}}
       
       - name: updating lambda function
         run: |
